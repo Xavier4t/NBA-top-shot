@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from splinter import Browser
 import time
 from selenium import webdriver
+from bs4 import BeautifulSoup as bs
 
 # Load env to retrieve hidden variables
 load_dotenv()
@@ -49,12 +50,12 @@ def fundsLogin(url,browser):
 
 
 # Function to download the CSVs
-def DownlowadCSV(browser):
+def DownlowadCSV(browser, numpages):
     target1='button[title="Click for sale history."]'
     target2='button[title="Download CSV"]'
     target3='button[aria-label="Close"]'
     advancepage=browser.find_by_tag('div[class="text-left col-4"]').find_by_tag('button[class="btn btn-secondary"]').first
-    for page in range(1,13):
+    for page in range(1,numpages):
         if browser.is_element_visible_by_css(target1, wait_time=25):
             sold_history=browser.find_by_css(target1)
             for s in sold_history:
@@ -90,7 +91,15 @@ def DownlowadCSV(browser):
                 time.sleep(6)
             else:
                 time.sleep(3)
-                              
+
+
+def Page(browser):
+    html = browser.html
+    soup=bs(html, 'html.parser')
+    strong=soup.find('strong').text
+    numpages=int(strong[-2:]
+    return numpages
+    
 # Function to initialize the scrap
 def OneTopShot(url1, url2):
     browser = initBrowser(executable_path, outputPath, False)
@@ -98,7 +107,8 @@ def OneTopShot(url1, url2):
     time.sleep(1)
     browser.visit(url2)
     time.sleep(1)
-    DownlowadCSV(browser)
+    numpages=Page(browser)
+    DownlowadCSV(browser, numpages)
     time.sleep(2)
     browser.execute_script("var message; message= 'Download Complete!'; window.alert(message);")
 
