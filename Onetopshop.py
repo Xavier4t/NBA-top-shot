@@ -105,5 +105,7 @@ def OneTopShot(url1, url2):
 # Initialize the script
 
 if __name__ == "__main__":
-    OneTopShot(loginURL, fundsURL)
-   
+    try:
+        OneTopShot(loginURL, fundsURL)
+    except Exception as e:
+        print(e)  
