@@ -72,7 +72,7 @@ def DownlowadCSV(browser, numpages):
                         try:
                             export=browser.find_by_css(target2)
                             export.mouse_over()
-                            export.click()
+#                             export.click()
                             time.sleep(2)
                         except Exception as e:
                             print(f'"Export" element error on page {page}.\n{e}')
@@ -124,7 +124,7 @@ def NBATopShot(url1, url2):
     totalseconds=end-start
     total=time.gmtime(totalseconds)       
     time.sleep(1)
-    js = f'var message; message= "Download Complete in {total[4]} minutes {total[5]} seconds"; window.alert(message);'
+    js = f'var message; message= "Download Complete in {total[3] hours {total[4]} minutes {total[5]} seconds"; window.alert(message);'
     time.sleep(1)           
     browser.execute_script(js)
 # Initialize the script
