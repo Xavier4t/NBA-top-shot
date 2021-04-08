@@ -12,13 +12,19 @@ executable_path=os.getenv('executable_path')
 User=os.getenv('funds_User')
 Password=os.getenv('funds_Pass')
 
+# Create a new folder each time the script is run, named with the current date and time
+seconds = time.time()
+today=time.ctime(seconds)
+date = today.replace(" ", "_")
+outputfolder = date.replace(":", ".")
+
 # Create csv folder in case it doesn't exist.
 parent_dir = os.getcwd()
-outputPath = os.path.join(parent_dir, 'csv')
+outputPath = os.path.join(parent_dir, outputfolder)
 try:
     os.mkdir(outputPath)
 except:
-    pass
+    print('Folder already exists.')
 
 # URL to scrap:
 loginURL='https://www.addmorefunds.com/login/'
@@ -37,6 +43,7 @@ def initBrowser(exPath, outputPath, headless=False):
     }
     options.add_experimental_option("prefs", prefs)
     options.add_argument("--disable-infobars")
+    options.add_argument("--no-sandbox");
     options.add_argument("--start-maximized")
     
     return Browser("chrome", **exPath, headless=headless, options=options)
@@ -66,6 +73,7 @@ def DownlowadCSV(browser, numpages):
                             export=browser.find_by_css(target2)
                             export.mouse_over()
                             export.click()
+                            time.sleep(2)
                         except Exception as e:
                             print(f'"Export" element error on page {page}.\n{e}')
                     else:
@@ -75,6 +83,7 @@ def DownlowadCSV(browser, numpages):
                             c=browser.find_by_css(target3)
                             c.mouse_over()
                             c.click()
+                            time.sleep(1)
                         except Exception as e:
                             print(f'"Close element error on page {page}:\n{e}')
                     else:
@@ -97,7 +106,7 @@ def Page(browser):
     html = browser.html
     soup=bs(html, 'html.parser')
     strong=soup.find('strong').text
-    numpages=int(strong[-2:]
+    numpages=int(strong[-2:])
     return numpages
     
 # Function to initialize the scrap
@@ -108,10 +117,16 @@ def OneTopShot(url1, url2):
     browser.visit(url2)
     time.sleep(1)
     numpages=Page(browser)
+    time.sleep(1)
+    start=time.time()
     DownlowadCSV(browser, numpages)
-    time.sleep(2)
-    browser.execute_script("var message; message= 'Download Complete!'; window.alert(message);")
-
+    end=time.time()
+    totalseconds=end-start
+    total=time.gmtime(totalseconds)       
+    time.sleep(1)
+    js = f'var message; message= "Download Complete in {total[4]} minutes {total[5]} seconds"; window.alert(message);'
+    time.sleep(1)           
+    browser.execute_script(js)
 # Initialize the script
 
 if __name__ == "__main__":
