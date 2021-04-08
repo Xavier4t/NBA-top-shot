@@ -101,7 +101,7 @@ def DownlowadCSV(browser, numpages):
             else:
                 time.sleep(3)
 
-
+# Function to find the number of pages on nbatopshop
 def Page(browser):
     html = browser.html
     soup=bs(html, 'html.parser')
@@ -110,7 +110,7 @@ def Page(browser):
     return numpages
     
 # Function to initialize the scrap
-def OneTopShot(url1, url2):
+def NBATopShot(url1, url2):
     browser = initBrowser(executable_path, outputPath, False)
     fundsLogin(url1, browser)
     time.sleep(1)
@@ -131,6 +131,6 @@ def OneTopShot(url1, url2):
 
 if __name__ == "__main__":
     try:
-        OneTopShot(loginURL, fundsURL)
+        NBATopShot(loginURL, fundsURL)
     except Exception as e:
         print(e)  
