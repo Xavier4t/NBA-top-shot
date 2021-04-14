@@ -35,7 +35,7 @@ fundsURL='https://www.addmorefunds.com/nft/nba-top-shot/'
 # Function to initilize Chrome browser
 def initChrome(executablePath, outputPath):
     expath = {"executable_path": executablePath}
-    options = webdriver.ChrohOptions()
+    options = webdriver.ChromeOptions()
     prefs = {
         "download.default_directory" : outputPath,
         "download.directory_upgrade": "true",
@@ -136,6 +136,7 @@ def Page(browser):
     soup=bs(html, 'html.parser')
     strong=soup.find('strong').text
     numpages=int(strong[-2:])
+    print(numpages, flush=True)
     return numpages
     
 # Function to initialize the scrap
@@ -145,7 +146,8 @@ def NBATopShot(url1, url2, exPath):
     time.sleep(1)
     browser.visit(url2)
     time.sleep(1)
-    numpages=Page(browser)
+#     numpages=Page(browser)
+    numpages=15
     time.sleep(1)
     start=time.time()
     DownlowadCSV(browser, numpages)
