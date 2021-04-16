@@ -157,8 +157,10 @@ def NBATopShot(url1, url2, exPath):
     time.sleep(1)
     browser.visit(url2)
     time.sleep(2)
+    # remove banner	
     removeBanner(browser)
     time.sleep(1)
+    # continue script
     numpages=Page(browser)
     time.sleep(1)
     start=time.time()
