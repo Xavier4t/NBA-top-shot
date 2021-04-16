@@ -79,7 +79,7 @@ def initBrowser(exPath, downloadFolder):
 # Log In function
 def fundsLogin(url,browser):
     browser.visit(url)
-    removeBanner(browser)
+#     removeBanner(browser)
     browser.fill('username', User)
     browser.fill('password', Password)
     browser.find_by_value('Sign In').click() 
@@ -87,7 +87,7 @@ def fundsLogin(url,browser):
 
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
-    
+    removeBanner(browser)
     target1='button[title="Click for sale history."]'
     target2='button[title="Download CSV"]'
     target3='button[aria-label="Close"]'
@@ -154,14 +154,11 @@ def removeBanner(browser):
 def NBATopShot(url1, url2, exPath):
     browser = initBrowser(exPath, outputPath)
     fundsLogin(url1, browser)
-    # remove new banners
-    removeBanner(browser)
+    time.sleep(1)
     browser.visit(url2)
     time.sleep(2)
-    browser.execute_script("window.scrollTo(0, 0);")
     removeBanner(browser)
-    browser.execute_script("window.scrollTo(0, 0);")
-    # continue with the script
+    time.sleep(1)
     numpages=Page(browser)
     time.sleep(1)
     start=time.time()
