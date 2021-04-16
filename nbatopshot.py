@@ -79,6 +79,7 @@ def initBrowser(exPath, downloadFolder):
 # Log In function
 def fundsLogin(url,browser):
     browser.visit(url)
+    removeBanner(browser)
     browser.fill('username', User)
     browser.fill('password', Password)
     browser.find_by_value('Sign In').click() 
@@ -86,6 +87,7 @@ def fundsLogin(url,browser):
 
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
+    
     target1='button[title="Click for sale history."]'
     target2='button[title="Download CSV"]'
     target3='button[aria-label="Close"]'
@@ -136,18 +138,31 @@ def Page(browser):
     soup=bs(html, 'html.parser')
     strong=soup.find('strong').text
     numpages=int(strong[-2:])
-    print(numpages, flush=True)
     return numpages
-    
+
+# Remove new banner
+def removeBanner(browser):
+    browser.execute_script("window.scrollTo(0, 0);")
+    target0='button[aria-label="Close"]'
+    if browser.is_element_visible_by_css(target0, wait_time=25):      
+        banner2=browser.find_by_css(target0)  
+        banner2.mouse_over()
+        banner2.click()
+        time.sleep(1)
+        
 # Function to initialize the scrap
 def NBATopShot(url1, url2, exPath):
     browser = initBrowser(exPath, outputPath)
     fundsLogin(url1, browser)
-    time.sleep(1)
+    # remove new banners
+    removeBanner(browser)
     browser.visit(url2)
-    time.sleep(1)
-#     numpages=Page(browser)
-    numpages=15
+    time.sleep(2)
+    browser.execute_script("window.scrollTo(0, 0);")
+    removeBanner(browser)
+    browser.execute_script("window.scrollTo(0, 0);")
+    # continue with the script
+    numpages=Page(browser)
     time.sleep(1)
     start=time.time()
     DownlowadCSV(browser, numpages)
@@ -158,8 +173,8 @@ def NBATopShot(url1, url2, exPath):
     js = f'var message; message= "Download Complete in {total[3]} hours {total[4]} minutes {total[5]} seconds", window.alert(message);'
     time.sleep(1)           
     browser.execute_script(js)
+    
 # Initialize the script
-
 if __name__ == "__main__":
     try:
         NBATopShot(loginURL, fundsURL, exPath)
