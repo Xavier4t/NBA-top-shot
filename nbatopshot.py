@@ -45,6 +45,7 @@ def initChrome(executablePath, outputPath):
     options.add_experimental_option("prefs", prefs)
     options.add_argument("--disable-infobars")
     options.add_argument("--start-maximized")
+    options.add_argument("--no-sandbox")
     
     return Browser("chrome", **expath, headless=False, options=options)
 
@@ -79,18 +80,19 @@ def initBrowser(exPath, downloadFolder):
 # Log In function
 def fundsLogin(url,browser):
     browser.visit(url)
-#     removeBanner(browser)
     browser.fill('username', User)
     browser.fill('password', Password)
     browser.find_by_value('Sign In').click() 
 
 
 # Function to download the CSVs
+# Function to download the CSVs
 def DownlowadCSV(browser, numpages):
     removeBanner(browser)
     target1='button[title="Click for sale history."]'
-    target2='button[title="Download CSV"]'
-    target3='button[aria-label="Close"]'
+    target2='nav[class="moment-tabs navbar"]'
+    target3='button[title="Download CSV"]'
+    target4='button[aria-label="Close"]'
     advancepage=browser.find_by_tag('div[class="text-left col-4"]').find_by_tag('button[class="btn btn-secondary"]').first
     for page in range(1,numpages):
         print(f'\nStart downloads in page {page}\n', flush=True)
@@ -99,19 +101,22 @@ def DownlowadCSV(browser, numpages):
             for s in sold_history:
                 try:
                     s.click()
-                    if browser.is_element_visible_by_css(target2, wait_time=25):
+                    maxvalue = browser.links.find_by_text('Max')
+                    maxvalue.click()
+                    time.sleep(1)
+                    if browser.is_element_visible_by_css(target3, wait_time=25):
                         try:
-                            export=browser.find_by_css(target2)
+                            export=browser.find_by_css(target3)
                             export.mouse_over()
                             export.click()
-                            time.sleep(2)
+                            time.sleep(1)
                         except Exception as e:
                             print(f'"Export" element error on page {page}.\n{e}', flush=True)
                     else:
                         print(f'"Export" element not visible on page {page}.\n', flush=True)
-                    if browser.is_element_visible_by_css(target3, wait_time=25):
+                    if browser.is_element_visible_by_css(target4, wait_time=25):
                         try: 
-                            c=browser.find_by_css(target3)
+                            c=browser.find_by_css(target4)
                             c.mouse_over()
                             c.click()
                             time.sleep(1)
@@ -127,10 +132,12 @@ def DownlowadCSV(browser, numpages):
             advancepage.click()            
             time.sleep(1)
             browser.execute_script("window.scrollTo(0, 0);")
-            if (page % 2) == 0:
-                time.sleep(4)
-            else:
-                time.sleep(2)
+            time.sleep(2)
+            
+#             if (page % 2) == 0:
+#                 time.sleep(4)
+#             else:
+#                 time.sleep(2) 
 
 # Function to find the number of pages on nbatopshop
 def Page(browser):
@@ -157,10 +164,6 @@ def NBATopShot(url1, url2, exPath):
     time.sleep(1)
     browser.visit(url2)
     time.sleep(2)
-    # remove banner	
-    removeBanner(browser)
-    time.sleep(1)
-    # continue script
     numpages=Page(browser)
     time.sleep(1)
     start=time.time()
