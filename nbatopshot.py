@@ -89,6 +89,7 @@ def fundsLogin(url,browser):
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
     removeBanner(browser)
+    time.sleep(1)
     target1='button[title="Click for sale history."]'
     target2='nav[class="moment-tabs navbar"]'
     target3='button[title="Download CSV"]'
