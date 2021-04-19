@@ -44,7 +44,8 @@ def initChrome(executablePath, outputPath):
     }
     options.add_experimental_option("prefs", prefs)
     options.add_argument("--disable-infobars")
-    options.add_argument("--start-maximized")
+#     options.add_argument("--start-maximized")
+    options.add_argument("window-size=1920,1080")
     options.add_argument("--no-sandbox")
     
     return Browser("chrome", **expath, headless=False, options=options)
