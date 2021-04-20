@@ -84,10 +84,13 @@ def fundsLogin(url,browser):
     browser.fill('username', User)
     browser.fill('password', Password)
     browser.find_by_value('Sign In').click() 
+    time.sleep(1)
+    browser.visit(fundsURL)
+    time.sleep(2)
 
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
-    removeBanner(browser)
+    
     target1='button[title="Click for sale history."]'
     target2='nav[class="moment-tabs navbar"]'
     target3='button[title="Download CSV"]'
@@ -155,27 +158,45 @@ def removeBanner(browser):
         time.sleep(1)
         
 # Function to initialize the scrap
-def NBATopShot(url1, url2, exPath):
-    browser = initBrowser(exPath, outputPath)
-    fundsLogin(url1, browser)
-    time.sleep(1)
-    browser.visit(url2)
-    time.sleep(2)
-    numpages=Page(browser)
-    time.sleep(1)
-    start=time.time()
-    DownlowadCSV(browser, numpages)
-    end=time.time()
-    totalseconds=end-start
-    total=time.gmtime(totalseconds)       
-    time.sleep(1)
-    js = f'var message; message= "Download Complete in {total[3]} hours {total[4]} minutes {total[5]} seconds", window.alert(message);'
-    time.sleep(1)           
-    browser.execute_script(js)
+# def NBATopShot(url1, url2, exPath):
+#     browser = initBrowser(exPath, outputPath)
+#     fundsLogin(url1, browser)
+#     time.sleep(1)
+#     browser.visit(url2)
+#     time.sleep(2)
+#     numpages=Page(browser)
+#     time.sleep(1)
+#     start=time.time()
+#     DownlowadCSV(browser, numpages)
+#     end=time.time()
+#     totalseconds=end-start
+#     total=time.gmtime(totalseconds)       
+#     time.sleep(1)
+#     js = f'var message; message= "Download Complete in {total[3]} hours {total[4]} minutes {total[5]} seconds", window.alert(message);'
+#     time.sleep(1)           
+#     browser.execute_script(js)
     
 # Initialize the script
 if __name__ == "__main__":
     try:
-        NBATopShot(loginURL, fundsURL, exPath)
+        browser=initBrowser(exPath, outputPath)
+        fundsLogin(loginURL, browser)
+        time.sleep(1)
+
+        removeBanner(browser)
+        time.sleep(1)
+        numpages=Page(browser) 
+        start=time.time()
+        DownlowadCSV(browser, numpages)
+        end=time.time()
+        totalseconds=end-start                 
+        total=time.gmtime(totalseconds)       
+        time.sleep(1)
+        js = f'var message; message= "Download Complete in {total[3]} hours {total[4]} minutes {total[5]} seconds", window.alert(message);'
+        time.sleep(1)           
+        browser.execute_script(js)
+        
     except Exception as e:
-        print(e, flush=True)  
+        print(e, flush=True)
+             
+            
