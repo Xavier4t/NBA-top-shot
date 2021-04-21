@@ -79,18 +79,17 @@ def initBrowser(exPath, downloadFolder):
         initBrowser(exPath, downloadFolder)
         
 # Log In function
-def fundsLogin(url,browser):
-    browser.visit(url)
+def fundsLogin(url1,url2, browser):
+    browser.visit(url1)
     browser.fill('username', User)
     browser.fill('password', Password)
     browser.find_by_value('Sign In').click() 
     time.sleep(1)
-    browser.visit(fundsURL)
+    browser.visit(url2)
     time.sleep(2)
 
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
-    
     target1='button[title="Click for sale history."]'
     target2='nav[class="moment-tabs navbar"]'
     target3='button[title="Download CSV"]'
@@ -105,7 +104,7 @@ def DownlowadCSV(browser, numpages):
                     s.click()
                     maxvalue = browser.links.find_by_text('Max')
                     maxvalue.click()
-                    time.sleep(1)
+                    time.sleep(2)
                     if browser.is_element_visible_by_css(target3, wait_time=25):
                         try:
                             export=browser.find_by_css(target3)
@@ -133,7 +132,6 @@ def DownlowadCSV(browser, numpages):
             print(f'Finished downloads in page {page}\n', flush=True)                      
             advancepage.click()            
             time.sleep(1)
-            evenv /setup
             if (page % 2) == 0:
                 time.sleep(4)
             else:
@@ -157,33 +155,12 @@ def removeBanner(browser):
         banner2.click()
         time.sleep(1)
         
-# Function to initialize the scrap
-# def NBATopShot(url1, url2, exPath):
-#     browser = initBrowser(exPath, outputPath)
-#     fundsLogin(url1, browser)
-#     time.sleep(1)
-#     browser.visit(url2)
-#     time.sleep(2)
-#     numpages=Page(browser)
-#     time.sleep(1)
-#     start=time.time()
-#     DownlowadCSV(browser, numpages)
-#     end=time.time()
-#     totalseconds=end-start
-#     total=time.gmtime(totalseconds)       
-#     time.sleep(1)
-#     js = f'var message; message= "Download Complete in {total[3]} hours {total[4]} minutes {total[5]} seconds", window.alert(message);'
-#     time.sleep(1)           
-#     browser.execute_script(js)
     
 # Initialize the script
 if __name__ == "__main__":
     try:
         browser=initBrowser(exPath, outputPath)
-        fundsLogin(loginURL, browser)
-        time.sleep(1)
-
-        removeBanner(browser)
+        fundsLogin(loginURL, fundsURL, browser)
         time.sleep(1)
         numpages=Page(browser) 
         start=time.time()
