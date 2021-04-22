@@ -95,16 +95,18 @@ def DownlowadCSV(browser, numpages):
     target3='button[title="Download CSV"]'
     target4='button[aria-label="Close"]'
     advancepage=browser.find_by_tag('div[class="text-left col-4"]').find_by_tag('button[class="btn btn-secondary"]').first
-    for page in range(1,numpages):
+    nump=numpages+1
+    for page in range(1,nump):
         print(f'\nStart downloads in page {page}\n', flush=True)
         if browser.is_element_visible_by_css(target1, wait_time=25):
             sold_history=browser.find_by_css(target1)
             for s in sold_history:
                 try:
                     s.click()
+                    time.sleep(1)
                     maxvalue = browser.links.find_by_text('Max')
                     maxvalue.click()
-                    time.sleep(2)
+                    time.sleep(5)
                     if browser.is_element_visible_by_css(target3, wait_time=25):
                         try:
                             export=browser.find_by_css(target3)
@@ -144,6 +146,7 @@ def Page(browser):
     soup=bs(html, 'html.parser')
     strong=soup.find('strong').text
     numpages=int(strong[-2:])
+    print(f'\nTotal number of pages: {numpages}\n', flush=True)
     return numpages
 
 # Remove new banner
