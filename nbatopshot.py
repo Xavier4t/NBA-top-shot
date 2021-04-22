@@ -87,7 +87,7 @@ def fundsLogin(url,browser):
 
 # Function to download the CSVs
 def DownlowadCSV(browser, numpages):
-    removeBanner(browser)
+#     removeBanner(browser)
     target1='button[title="Click for sale history."]'
     target2='nav[class="moment-tabs navbar"]'
     target3='button[title="Download CSV"]'
@@ -130,7 +130,7 @@ def DownlowadCSV(browser, numpages):
             print(f'Finished downloads in page {page}\n', flush=True)                      
             advancepage.click()            
             time.sleep(1)
-            evenv /setup
+            browser.execute_script("window.scrollTo(0, 0);")
             if (page % 2) == 0:
                 time.sleep(4)
             else:

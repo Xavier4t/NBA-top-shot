@@ -132,6 +132,7 @@ def DownlowadCSV(browser, numpages):
             print(f'Finished downloads in page {page}\n', flush=True)                      
             advancepage.click()            
             time.sleep(1)
+            browser.execute_script("window.scrollTo(0, 0);")
             if (page % 2) == 0:
                 time.sleep(4)
             else:
@@ -151,7 +152,6 @@ def removeBanner(browser):
     target0='button[class="close"]'
     if browser.is_element_visible_by_css(target0, wait_time=25):      
         banner2=browser.find_by_css(target0)  
-#         banner2.mouse_over()
         banner2.click()
         time.sleep(1)
         
